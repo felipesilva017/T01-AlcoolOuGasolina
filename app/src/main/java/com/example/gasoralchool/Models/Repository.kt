@@ -31,7 +31,6 @@ interface Repository<Model> {
     val editableSharedPreferences = sharedPreferences.edit()
     editableSharedPreferences.putString(key, json).toString()
     editableSharedPreferences.apply()
-    editableSharedPreferences.commit()
   }
 
   fun readHelper(context: Context, type: Class<Model>): List<Model> {
