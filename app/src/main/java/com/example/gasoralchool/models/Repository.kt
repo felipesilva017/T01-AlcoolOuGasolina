@@ -1,4 +1,4 @@
-package com.example.gasoralchool.Models
+package com.example.gasoralchool.models
 
 import android.content.Context
 import com.example.gasoralchool.R
@@ -11,7 +11,7 @@ interface Repository<Model> {
 
   fun readAll(): List<Model>
 
-  fun read(): Model
+  fun read(id: String): Model
 
   fun save(objectModel: Model)
 
@@ -19,9 +19,7 @@ interface Repository<Model> {
 
   fun delete(id: String)
 
-  fun saveHelper(context: Context, model: Model, type: Class<Model>) {
-    val allValues = readHelper(context, type).toMutableList()
-    allValues.add(model)
+  fun saveHelper(context: Context, allValues: List<Model>, type: Class<Model>) {
     val json = Gson().toJson(allValues)
     val sharedPreferences =
       context.getSharedPreferences(
