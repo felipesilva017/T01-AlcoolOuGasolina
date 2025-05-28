@@ -10,7 +10,7 @@ data class GasStation(
   val coordinates: Coordinates = Coordinates(41.40338, 2.17403),
 ) : Serializable {
   init {
-    if (fuels.size < 2) throw Exception("Missing Gas or ethanol")
+    if (fuels.size < 2) throw Exception("Both gas and ethanol fuels are required")
   }
 
   fun whichFuelIsBetterOption(carHas75Efficiency: Boolean): Fuel {
