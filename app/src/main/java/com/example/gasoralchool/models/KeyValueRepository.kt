@@ -19,7 +19,7 @@ interface KeyValueRepository<Model> {
         Context.MODE_PRIVATE,
       )
     val editableSharedPreferences = sharedPreferences.edit()
-    editableSharedPreferences.putString(key, json).toString()
+    editableSharedPreferences.putString(key, json)
     editableSharedPreferences.apply()
   }
 
