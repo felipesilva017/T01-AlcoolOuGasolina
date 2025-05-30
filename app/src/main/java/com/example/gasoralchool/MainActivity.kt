@@ -23,6 +23,10 @@ class MainActivity : ComponentActivity() {
         NavHost(navController = navController, startDestination = Routes.GAS_STATION) {
           // composable("input") { InputView(navController) }
           composable(Routes.GAS_STATION) { ListGasStations(navController, null) }
+          composable(Routes.GAS_STATION + "/$id") { backStackEntry ->
+            val id = backStackEntry.arguments?.getString("id")
+            ListGasStations(navController, id)
+          }
           composable(Routes.GAS_STATION_FORM) { EthanolOrGas(navController) }
         }
       }
