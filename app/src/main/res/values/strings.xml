@@ -3,5 +3,6 @@
     <string name="app_preferences_name">GasOrAlchool</string>
     <string name="insert_gas_station">Inserir Posto</string>
     <string name="list_gas_station_title">Lista de Postos</string>
+    <string name="list_gas_station_without_name">Sem nome</string>
     <string name="calculate_text_submit_button">Calcular</string>
 </resources>
