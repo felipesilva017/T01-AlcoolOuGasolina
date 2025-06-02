@@ -5,7 +5,6 @@ import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.temporal.ChronoUnit
 import java.util.UUID
-import java.util.concurrent.ThreadLocalRandom
 
 data class GasStation(
   val id: String = UUID.randomUUID().toString(),
@@ -29,9 +28,6 @@ data class GasStation(
 
 fun getCurrentTime(): String {
   val utc = ZoneOffset.UTC
-  val today = OffsetDateTime.now(utc).truncatedTo(ChronoUnit.SECONDS)
-  val seventyYearsAgo = today.minusYears(70)
-  val totalSeconds = ChronoUnit.SECONDS.between(seventyYearsAgo, today)
-  val date = today.minusSeconds(ThreadLocalRandom.current().nextLong(0, totalSeconds))
-  return date.toString()
+  val now = OffsetDateTime.now(utc).truncatedTo(ChronoUnit.SECONDS)
+  return now.toString()
 }
