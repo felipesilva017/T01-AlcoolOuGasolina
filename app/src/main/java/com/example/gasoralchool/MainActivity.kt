@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.gasoralchool.view.EthanolOrGas
+import com.example.gasoralchool.view.GasStationView
 import com.example.gasoralchool.view.ListGasStations
 import com.example.gasoralchool.view.Routes
 import com.example.gasoralchool.view.ui.theme.GasOrAlchoolTheme
@@ -26,6 +27,10 @@ class MainActivity : ComponentActivity() {
           composable(Routes.GAS_STATION_FORM + "/{id}") { backStackEntry ->
             val id = backStackEntry.arguments?.getString("id")
             EthanolOrGas(navController, id)
+          }
+          composable(Routes.GAS_STATION_INFO + "/{id}") { backStackEntry ->
+            val id = backStackEntry.arguments?.getString("id")
+            GasStationView(navController, id)
           }
         }
       }

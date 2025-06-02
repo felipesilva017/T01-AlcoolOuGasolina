@@ -4,5 +4,8 @@
     <string name="insert_gas_station">Inserir Posto</string>
     <string name="list_gas_station_title">Lista de Postos</string>
     <string name="list_gas_station_without_name">Sem nome</string>
+    <string name="edit_gas_station_button">Editar</string>
+    <string name="delete_gas_station_button">Deletar</string>
+    <string name="gas_staton_not_found">Posto não encontrado</string>
     <string name="calculate_text_submit_button">Calcular</string>
 </resources>
