@@ -33,18 +33,64 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.gasoralchool.R
+import com.example.gasoralchool.models.gasStation.Fuel
+import com.example.gasoralchool.models.gasStation.GasStation
+import com.example.gasoralchool.models.gasStation.GasStationRepository
 import com.example.gasoralchool.models.userPreferences.UserPreferences
 import com.example.gasoralchool.models.userPreferences.UserPreferencesRepository
 
 @Composable
-fun EthanolOrGas(navController: NavHostController) {
+fun EthanolOrGas(navController: NavHostController, id: String?) {
   val context = LocalContext.current
+  val gasStationRepository = GasStationRepository(context)
+  val gasStation = if (id != null) gasStationRepository.read(id) else null
+
   val userPreferences = UserPreferencesRepository(context)
 
-  var ethanol by remember { mutableStateOf("") }
-  var gasolina by remember { mutableStateOf("") }
-  var nomeDoPosto by remember { mutableStateOf("") }
+  val initialName = gasStation?.name ?: ""
+  val initialGas = gasStation?.fuels?.get(0)?.price?.toString() ?: ""
+  val initialEthanol = gasStation?.fuels?.get(1)?.price?.toString() ?: ""
+
+  var name by remember { mutableStateOf(initialName) }
+  var ethanol by remember { mutableStateOf(initialEthanol) }
+  var gas by remember { mutableStateOf(initialGas) }
   var checkedState by remember { mutableStateOf(userPreferences.read().carEfficiencyIs75) }
+
+  fun saveGasStation() {
+    val newGasStation =
+      GasStation(
+        name = name,
+        fuels =
+          listOf(
+            Fuel(name = "gas", price = gas.toDouble()),
+            Fuel(name = "ethanol", price = ethanol.toDouble()),
+          ),
+      )
+    gasStationRepository.save(newGasStation)
+  }
+
+  fun editGasStation() {
+    if (gasStation == null || id == null) return
+    val editedGasStation =
+      gasStation.copy(
+        name = name,
+        fuels =
+          listOf(
+            Fuel(name = "gas", price = gas.toDouble()),
+            Fuel(name = "ethanol", price = ethanol.toDouble()),
+          ),
+      )
+    gasStationRepository.edit(id, editedGasStation)
+  }
+
+  fun mutateGasStationAndNavigate() {
+    if (id == null) {
+      saveGasStation()
+    } else {
+      editGasStation()
+    }
+    navController.popBackStack()
+  }
 
   // A surface container using the 'background' color from the theme
   Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
@@ -64,16 +110,16 @@ fun EthanolOrGas(navController: NavHostController) {
       )
       // Campo de texto para preço da Gasolina
       OutlinedTextField(
-        value = gasolina,
-        onValueChange = { gasolina = it },
+        value = gas,
+        onValueChange = { gas = it },
         label = { Text("Preço da Gasolina (R$)") },
         modifier = Modifier.fillMaxWidth(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
       )
       // Campo de texto para preço da Gasolina
       OutlinedTextField(
-        value = nomeDoPosto,
-        onValueChange = { nomeDoPosto = it },
+        value = name,
+        onValueChange = { name = it },
         label = { Text("Nome do Posto (Opcional))") },
         modifier = Modifier.fillMaxWidth(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -106,8 +152,10 @@ fun EthanolOrGas(navController: NavHostController) {
           },
         )
       }
-      // Botão de cálculo
-      Button(onClick = {}, modifier = Modifier.fillMaxWidth()) { Text("Calcular") }
+
+      Button(onClick = { mutateGasStationAndNavigate() }, modifier = Modifier.fillMaxWidth()) {
+        Text(context.getString(R.string.calculate_text_submit_button))
+      }
 
       // Texto do resultado
       Text(

@@ -1,6 +1,9 @@
 package com.example.gasoralchool.models.gasStation
 
 import java.io.Serializable
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
+import java.time.temporal.ChronoUnit
 import java.util.UUID
 
 data class GasStation(
@@ -8,6 +11,7 @@ data class GasStation(
   val name: String?,
   val fuels: List<Fuel>,
   val coordinates: Coordinates = Coordinates(41.40338, 2.17403),
+  val createdAt: String = getCurrentTime(),
 ) : Serializable {
   init {
     if (fuels.size < 2) throw Exception("Both gas and ethanol fuels are required")
@@ -20,4 +24,10 @@ data class GasStation(
     val priceProportionBetweenFuels = ethanol.price / gas.price
     return if (priceProportionBetweenFuels > proportionToCompare) gas else ethanol
   }
+}
+
+fun getCurrentTime(): String {
+  val utc = ZoneOffset.UTC
+  val now = OffsetDateTime.now(utc).truncatedTo(ChronoUnit.SECONDS)
+  return now.toString()
 }

@@ -27,7 +27,7 @@ class GasStationRepository(private val context: Context) : Repository<GasStation
   }
 
   override fun edit(id: String, objectModel: GasStation) {
-    val objectModelCopy = objectModel.copy(id = id)
+    val objectModelCopy = objectModel.copy(id = id, createdAt = objectModel.createdAt)
     delete(id)
     save(objectModelCopy)
   }

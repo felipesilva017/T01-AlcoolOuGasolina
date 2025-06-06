@@ -1,7 +1,6 @@
 package com.example.gasoralchool.view
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -20,6 +19,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.AbsoluteAlignment
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -29,40 +30,53 @@ import com.example.gasoralchool.models.gasStation.GasStationRepository
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ListGasStations(navController: NavHostController, id: String?) {
+fun ListGasStations(navController: NavHostController) {
   val context = LocalContext.current
   val gasStationRepository = GasStationRepository(context)
   val gasStationsList = gasStationRepository.readAll()
   Scaffold(
-    topBar = { TopAppBar(title = { Text(context.getString(R.string.list_gas_station_title)) }) }
+    topBar = { TopAppBar(title = { Text(context.getString(R.string.list_gas_station_title)) }) },
+    floatingActionButton = {
+      FloatingActionButton(onClick = { navController.navigate(Routes.GAS_STATION_FORM) }) {
+        Icon(Icons.Filled.Add, context.getString(R.string.insert_gas_station))
+      }
+    },
   ) { innerPadding ->
-    Column {
-      LazyColumn(
-        modifier = Modifier.fillMaxSize().padding(innerPadding),
-        contentPadding = PaddingValues(16.dp),
-      ) {
-        items(gasStationsList) { item ->
-          Card(
-            onClick = {
-              // Abrir Mapa
-              // navController.navigate(Routes.GAS_STATION_FORM + "/$item.id")
-              navController.navigate(Routes.GAS_STATION_FORM)
-            },
-            modifier = Modifier.fillMaxWidth().padding(10.dp),
+    LazyColumn(
+      modifier = Modifier.fillMaxSize().padding(innerPadding),
+      contentPadding = PaddingValues(16.dp),
+    ) {
+      items(gasStationsList) { item ->
+        Card(
+          onClick = {
+            val id = item.id
+            navController.navigate(Routes.GAS_STATION_INFO + "/$id")
+          },
+          modifier = Modifier.fillMaxWidth().padding(10.dp),
+        ) {
+          Row(
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
           ) {
-            Box(Modifier.fillMaxSize()) {
-              Text(text = item.name.toString(), modifier = Modifier.padding(16.dp))
-              Text(text = item.fuels.toString(), modifier = Modifier.padding(16.dp))
+            Text(
+              text = item.name ?: context.getString(R.string.list_gas_station_without_name),
+              modifier = Modifier.padding(16.dp),
+            )
+            Column(
+              verticalArrangement = Arrangement.SpaceBetween,
+              horizontalAlignment = AbsoluteAlignment.Right,
+            ) {
+              Row {
+                Text(text = item.fuels[0].name, modifier = Modifier.padding(8.dp))
+                Text(text = item.fuels[0].price.toString(), modifier = Modifier.padding(8.dp))
+              }
+              Row {
+                Text(text = item.fuels[1].name, modifier = Modifier.padding(8.dp))
+                Text(text = item.fuels[1].price.toString(), modifier = Modifier.padding(8.dp))
+              }
             }
           }
-        }
-      }
-      Row(
-        modifier = Modifier.fillMaxWidth().padding(16.dp),
-        horizontalArrangement = Arrangement.End,
-      ) {
-        FloatingActionButton(onClick = { navController.navigate(Routes.GAS_STATION_FORM) }) {
-          Icon(Icons.Filled.Add, context.getString(R.string.insert_gas_station))
         }
       }
     }
