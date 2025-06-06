@@ -33,7 +33,6 @@ fun GasStationView(navController: NavHostController, id: String?) {
   val errorState = remember { mutableStateOf(false) }
 
   LaunchedEffect(id) {
-    Log.d("GasStationView", "id: $id")
     if (id == null) {
       errorState.value = true
       return@LaunchedEffect
@@ -52,7 +51,7 @@ fun GasStationView(navController: NavHostController, id: String?) {
     }
   }
 
-  if (errorState.value) return
+  if (gasStationState.value == null || errorState.value) return
 
   val gasStation = gasStationState.value!!
   Log.d("GasStationView", gasStation.toString())
