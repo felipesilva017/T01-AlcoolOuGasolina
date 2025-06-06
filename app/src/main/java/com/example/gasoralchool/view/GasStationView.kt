@@ -46,7 +46,7 @@ fun GasStationView(navController: NavHostController, id: String?) {
 
     if (errorState.value || gasStationState.value == null) {
       navController.navigate(Routes.GAS_STATION)
-      Toast.makeText(context, context.getString(R.string.gas_staton_not_found), Toast.LENGTH_SHORT)
+      Toast.makeText(context, context.getString(R.string.gas_station_not_found), Toast.LENGTH_SHORT)
         .show()
     }
   }
