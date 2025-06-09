@@ -23,6 +23,21 @@ import androidx.navigation.NavHostController
 import com.example.gasoralchool.R
 import com.example.gasoralchool.models.gasStation.GasStation
 import com.example.gasoralchool.models.gasStation.GasStationRepository
+import androidx.compose.ui.res.stringResource
+import com.example.gasoralchool.util.openInMap
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
+
+fun formatDate(isoDate: String): String {
+  return try {
+    val zonedDateTime = ZonedDateTime.parse(isoDate)
+    val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
+    zonedDateTime.format(formatter)
+  } catch (e: DateTimeParseException) {
+    isoDate // Retorna a original caso não consiga formatar
+  }
+}
 
 @Composable
 fun GasStationView(navController: NavHostController, id: String?) {
@@ -59,7 +74,7 @@ fun GasStationView(navController: NavHostController, id: String?) {
   val name = gasStation.name ?: ""
   val gas = gasStation.fuels[0].price.toString() ?: ""
   val ethanol = gasStation.fuels[1].price.toString() ?: ""
-  val createdAt = gasStation.createdAt ?: ""
+  val createdAtFormatted = gasStation.createdAt?.let { formatDate(it) } ?: ""
 
   fun editGasStation() {
     navController.navigate(Routes.GAS_STATION_FORM + "/$id")
@@ -80,13 +95,20 @@ fun GasStationView(navController: NavHostController, id: String?) {
       Text(name)
       Text(gas)
       Text(ethanol)
-      Text(createdAt)
+      Text(createdAtFormatted)
       Button(onClick = { editGasStation() }) {
         Text(context.getString(R.string.edit_gas_station_button))
       }
       Button(onClick = { deleteGasStation() }) {
         Text(context.getString(R.string.delete_gas_station_button))
       }
+      Button(onClick = {
+        Log.v("GasStationView", "Lat: ${gasStation.coordinates.lat}, Long: ${gasStation.coordinates.long}")
+        openInMap(context, gasStation.coordinates.lat, gasStation.coordinates.long)
+      }) {
+        Text(stringResource(id = R.string.view_on_map))
+      }
+
     }
   }
 }

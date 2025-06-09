@@ -19,10 +19,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.gasoralchool.R
@@ -34,16 +34,25 @@ fun ListGasStations(navController: NavHostController) {
   val context = LocalContext.current
   val gasStationRepository = GasStationRepository(context)
   val gasStationsList = gasStationRepository.readAll()
+
   Scaffold(
-    topBar = { TopAppBar(title = { Text(context.getString(R.string.list_gas_station_title)) }) },
-    floatingActionButton = {
-      FloatingActionButton(onClick = { navController.navigate(Routes.GAS_STATION_FORM) }) {
-        Icon(Icons.Filled.Add, context.getString(R.string.insert_gas_station))
-      }
+    topBar = {
+      TopAppBar(
+        title = { Text(stringResource(id = R.string.list_gas_station_title)) }
+      )
     },
+    floatingActionButton = {
+      FloatingActionButton(onClick = {
+        navController.navigate(Routes.GAS_STATION_FORM)
+      }) {
+        Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.insert_gas_station))
+      }
+    }
   ) { innerPadding ->
     LazyColumn(
-      modifier = Modifier.fillMaxSize().padding(innerPadding),
+      modifier = Modifier
+        .fillMaxSize()
+        .padding(innerPadding),
       contentPadding = PaddingValues(16.dp),
     ) {
       items(gasStationsList) { item ->
@@ -52,20 +61,24 @@ fun ListGasStations(navController: NavHostController) {
             val id = item.id
             navController.navigate(Routes.GAS_STATION_INFO + "/$id")
           },
-          modifier = Modifier.fillMaxWidth().padding(10.dp),
+          modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp),
         ) {
           Row(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+              .fillMaxWidth()
+              .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.SpaceBetween
           ) {
             Text(
-              text = item.name ?: context.getString(R.string.list_gas_station_without_name),
-              modifier = Modifier.padding(16.dp),
+              text = item.name ?: stringResource(R.string.list_gas_station_without_name),
+              modifier = Modifier.weight(1f)
             )
             Column(
               verticalArrangement = Arrangement.SpaceBetween,
-              horizontalAlignment = AbsoluteAlignment.Right,
+              horizontalAlignment = Alignment.End,
             ) {
               Row {
                 Text(text = item.fuels[0].name, modifier = Modifier.padding(8.dp))
