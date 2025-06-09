@@ -8,4 +8,10 @@
     <string name="delete_gas_station_button">Deletar</string>
     <string name="gas_station_not_found">Posto não encontrado</string>
     <string name="calculate_text_submit_button">Calcular</string>
+    <string name="view_on_map">Ver no mapa</string>
+    <string name="ethanol_price_label">Preço do Álcool (R$)</string>
+    <string name="gas_price_label">Preço da Gasolina (R$)</string>
+    <string name="station_name_label">Nome do Posto (Opcional)</string>
+    <string name="efficiency_percentage_label">75%</string>
+    <string name="calculate_prompt">Vamos Calcular?</string>
 </resources>
