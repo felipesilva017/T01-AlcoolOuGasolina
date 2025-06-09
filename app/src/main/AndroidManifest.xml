@@ -3,6 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.gasoralchool" android:versionName="8.6.2011" android:versionCode="1"
     xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"

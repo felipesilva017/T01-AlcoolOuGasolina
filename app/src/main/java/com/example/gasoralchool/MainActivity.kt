@@ -13,11 +13,14 @@ import com.example.gasoralchool.view.GasStationView
 import com.example.gasoralchool.view.ListGasStations
 import com.example.gasoralchool.view.Routes
 import com.example.gasoralchool.view.ui.theme.GasOrAlchoolTheme
+import com.example.gasoralchool.util.requestLocationPermission
+
 
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
+    requestLocationPermission(this)
     setContent {
       GasOrAlchoolTheme {
         val navController: NavHostController = rememberNavController()
