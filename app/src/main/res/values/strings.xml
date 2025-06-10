@@ -14,4 +14,7 @@
     <string name="station_name_label">Nome do Posto (Opcional)</string>
     <string name="efficiency_percentage_label">75%</string>
     <string name="calculate_prompt">Vamos Calcular?</string>
+    <string name="ethanol_better">Etanol é mais vantajoso</string>
+    <string name="gasoline_better">Gasolina é mais vantajosa</string>
+    <string name="result">Resultado</string>
 </resources>

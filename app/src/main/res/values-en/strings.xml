@@ -14,4 +14,7 @@
     <string name="station_name_label">Station Name (Optional)</string>
     <string name="efficiency_percentage_label">75%</string>
     <string name="calculate_prompt">Let\'s calculate?</string>
+    <string name="ethanol_better">Ethanol is more cost-effective</string>
+    <string name="gasoline_better">Gasoline is more cost-effective</string>
+    <string name="result">Result</string>
 </resources>
