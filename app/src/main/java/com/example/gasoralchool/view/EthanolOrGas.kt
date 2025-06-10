@@ -25,6 +25,7 @@ import com.example.gasoralchool.models.userPreferences.UserPreferencesRepository
 
 import android.annotation.SuppressLint
 import android.location.Location
+import android.util.Log
 import com.google.android.gms.location.LocationServices
 
 @Composable
@@ -43,6 +44,7 @@ fun EthanolOrGas(navController: NavHostController, id: String?) {
     var ethanol by remember { mutableStateOf(initialEthanol) }
     var gas by remember { mutableStateOf(initialGas) }
     var checkedState by remember { mutableStateOf(userPreferences.read().carEfficiencyIs75) }
+    var bestFuelResult by remember { mutableStateOf("") }
 
     fun saveGasStation(location: Location?) {
 
@@ -110,6 +112,26 @@ fun EthanolOrGas(navController: NavHostController, id: String?) {
             }
     }
 
+    fun calculateBestFuel(): String {
+        return try {
+            val tempGasStation = GasStation(
+                name = name,
+                fuels = listOf(
+                    Fuel(name = "gas", price = gas.toDouble()),
+                    Fuel(name = "ethanol", price = ethanol.toDouble())
+                )
+            )
+            val bestFuel = tempGasStation.whichFuelIsBetterOption(checkedState)
+            val resultString = if (bestFuel.name == "gas") {
+                context.getString(R.string.gasoline_better)
+            } else {
+                context.getString(R.string.ethanol_better)
+            }
+            "${context.getString(R.string.result)}: $resultString"
+        } catch (e: Exception) {
+            "Erro no cálculo: ${e.message}"
+        }
+    }
 
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         Column(
@@ -140,7 +162,7 @@ fun EthanolOrGas(navController: NavHostController, id: String?) {
                 onValueChange = { name = it },
                 label = { Text(stringResource(R.string.station_name_label)) },
                 modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             )
 
             Row(
@@ -174,14 +196,35 @@ fun EthanolOrGas(navController: NavHostController, id: String?) {
             }
 
             Button(
-                onClick = { mutateGasStationAndNavigate() },
+                onClick = {
+                    bestFuelResult = calculateBestFuel()
+                },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(stringResource(R.string.calculate_text_submit_button))
+                Text(
+                    text = stringResource(R.string.calculate_text_submit_button)
+                )
+            }
+
+            Button(
+                onClick = {
+                    mutateGasStationAndNavigate()
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = stringResource(R.string.insert_gas_station)
+                )
             }
 
             Text(
                 text = stringResource(R.string.calculate_prompt),
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(top = 16.dp),
+            )
+
+            Text(
+                text = bestFuelResult,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(top = 16.dp),
             )
